@@ -1,0 +1,248 @@
+<!--Heredamos de la platilla el header y el footer -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+  <div style="display: flex;">
+
+    <div class="contenedor-banner-ayuda">
+      
+      <div class="banner-ayuda" >
+        
+        <div class="text-center" >
+          <br>
+          <h4>Ayuda con tu compra</h4> 
+          <div class="Image1"><img src="{% static 'img/SL-100420-36140-10.jpg' %}" style="max-width:90%"; alt="90%"; class="rounded-circle"></div>
+            <br>
+            <p class="texto-banner">Somos una tienda de productos para animales. El 10% de nuestras ganancias van dirigidas a la fundación patitas.</p>
+              <ul class="nav nav-pills flex-column" style="padding-left: 20px; padding-right: 20px;">
+                
+                {% if not user.is_authenticated %}
+                
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                  Iniciar sesión
+                </button>
+
+                {% endif %}
+
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#DONA" style="margin-top: 10px; margin-bottom: 30px;">
+                  ❤ Quiero Donar 
+                </button>
+              </ul>
+      </div>
+
+    </div>
+    </div>
+<!--Formulario-->
+    <div class="formulario" >      
+      <div class="contenedor-formulario" >
+        
+        <div class="texto-a">
+          <h2>REGISTRATE:</h2>
+          <h5>Únete a nosotros para obtener descuentos y apoyar a la fundación!</h5>
+        </div>
+
+        <!-- productos-->
+        
+        <form  style="width: 60%; margin: auto;"  method="POST" action="{% url 'registrate' %}" id="registerForm">
+          {% csrf_token %}
+            <div class="form-group">
+                <label for="nom">Nombre:</label>
+                <input type="text" class="form-control" id="txtNombre" name="txtNombre" required maxlength="40" minlength="3">
+            </div>
+
+            <div id="contenedor-error-nombre"></div>
+          
+            <div class="form-group">
+                <label for="usr">Usuario:</label>
+                <input type="text" class="form-control" id="txtUsuario" name="txtUsuario" required maxlength="40" minlength="3">
+            </div>
+          
+            <div id="contenedor-error-usuario"></div>
+
+            <div class="form-group">
+                <label for="eml">Correo:</label>
+                <input type="email" class="form-control" id="txtEmail" name="txtEmail" required maxlength="40" minlength="6">
+            </div>
+          
+            <div id="contenedor-error-correo"></div>
+
+            <div class="form-group">
+                <label for="pwd">Contraseña:</label>
+                <input type="password" class="form-control" id="txtPassword" name="txtPassword" required maxlength="20" minlength="6">
+            </div>
+          
+            <div class="form-group">
+                <label for="pswd">Confirmar contraseña:</label>
+                <input type="password" class="form-control" id="txtPassword2" name="txtPassword2" required maxlength="20" minlength="6">
+            </div>
+
+            <div id="contenedor-error-password"></div>
+
+            <div class="form-group">
+                <label for="dir">Dirección:</label>
+                <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" required maxlength="50" minlength="6">      
+            
+            </div>
+
+            <div id="contenedor-error-direccion"></div>
+            
+            <button type="submit" class="btn btn-success">Registrarse</button>
+            <p style="color: red;">{{ error }}</p>
+          </form>
+
+      </div>  
+    </div>
+    
+    </div>
+                
+                  
+{% endblock contenido %}
+
+{% block js %}
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+
+      function mensaje(p_icon, p_title,p_message){
+        Swal.fire({
+          icon: p_icon, // error
+          title: p_title, 
+          text: p_message
+        })
+      }
+
+      function sleep(milliseconds) {
+        var start = new Date().getTime();
+          for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds) {
+              break;
+          }
+        }
+      }
+
+      // Obtenemos la referencia
+      const $formulario = document.querySelector('#registerForm'),
+      $nombre = document.querySelector('#txtNombre'),
+      $usuario = document.querySelector('#txtUsuario'),
+      $correo = document.querySelector('#txtEmail'),
+      $password = document.querySelector('#txtPassword'),
+      $password2 = document.querySelector('#txtPassword2'),
+      $direccion = document.querySelector('#txtDireccion');
+
+      $formulario.onsubmit = evento => {
+        // Se previene el envio del formulario
+        evento.preventDefault();
+
+        const contenedorNombre = document.getElementById('contenedor-error-nombre'),
+        contenedorUsuario = document.getElementById('contenedor-error-usuario'),
+        contenedorCorreo = document.getElementById('contenedor-error-correo'),
+        contenedorPassword = document.getElementById('contenedor-error-password'),
+        contenedorDireccion = document.getElementById('contenedor-error-direccion');
+        
+        contenedorNombre.innerHTML = '';
+        contenedorUsuario.innerHTML = '';
+        contenedorCorreo.innerHTML = '';
+        contenedorPassword.innerHTML = '';
+        contenedorDireccion.innerHTML = '';
+        
+
+        const nombre = $nombre.value,
+        usuario = $usuario.value,
+        correo = $correo.value,
+        password = $password.value,
+        password2 = $password2.value,
+        direccion = $direccion.value;
+
+        // Validación
+        let v_valida = 0;
+        
+        if(nombre.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El nombre no debe estar vacío!
+                            </div>`;
+          contenedorNombre.innerHTML = v_errorMessage;
+        }else if(nombre.trim().length < 3){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El nombre debe tener al menos 3 carácteres!
+                            </div>`;
+          contenedorNombre.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        if(usuario.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El usuario no puede estar vacío!
+                            </div>`;
+          contenedorUsuario.innerHTML = v_errorMessage;
+        }else if(usuario.trim().length < 3){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El usuario debe tener al menos 3 carácteres!
+                            </div>`;
+          contenedorUsuario.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        if(correo.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El Correo Electrónico no puede estar vacío!
+                            </div>`;
+          contenedorCorreo.innerHTML = v_errorMessage;
+        }else if(correo.trim().length < 6){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El Correo Electrónico debe tener al menos 6 carácteres!
+                            </div>`;
+          contenedorCorreo.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        
+        if(password.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La contraseña no puede estar vacía!
+                            </div>`;
+          contenedorPassword.innerHTML = v_errorMessage;
+        }else if(password.trim().length < 6){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La contraseña debe tener al menos 6 carácteres!
+                            </div>`;
+          contenedorPassword.innerHTML = v_errorMessage;
+        }else if(password.trim() !== password2.trim()){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡Las contraseñas no coinciden!
+                            </div>`;
+          contenedorPassword.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        if(direccion.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La dirección no puede estar vacía!
+                            </div>`;
+          contenedorDireccion.innerHTML = v_errorMessage;
+        }else if(direccion.trim().length < 6){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La dirección debe tener al menos 6 carácteres!
+                            </div>`;
+          contenedorDireccion.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+
+        if(v_valida === 5){ 
+          // Se envia el formulario
+          $formulario.submit();
+        }else{
+          mensaje('error','Oops! ...','¡Porfavor, revise los datos ingresados! =(')
+        }
+      };
+    </script>
+
+{% endblock js %}

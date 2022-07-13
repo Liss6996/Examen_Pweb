@@ -1,0 +1,94 @@
+<!--Heredamos de la platilla el header y el footer -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+  <div style="display: flex;">
+
+    <div class="contenedor-banner-ayuda">
+      
+    <div class="banner-ayuda" >
+      
+      <div class="text-center" >
+        <br>
+        <h4>Ayuda con tu compra</h4> 
+        <div class="Image1"><img src="{% static 'img/SL-100420-36140-10.jpg' %}" style="max-width:90%"; alt="90%"; class="rounded-circle"></div>
+          <br>
+          <p class="texto-banner">Somos una tienda de productos para animales. El 10% de nuestras ganancias van dirigidas a la fundación patitas.</p>
+            <ul class="nav nav-pills flex-column" style="padding-left: 20px; padding-right: 20px;">
+
+              {% if not user.is_authenticated %}
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#login">
+                  Iniciar sesión
+                </button>
+
+                <button type="button" class="btn btn-primary" style="margin-top: 10px;">
+                  <a class="nav-link active" href="{% url 'registrate' %}">Registrate</a>
+                </button>
+
+              {% endif %}
+
+              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#DONA" style="margin-top: 10px; margin-bottom: 30px;">
+                ❤ Quiero Donar  
+              </button>
+            </ul>
+      </div>
+
+    </div>
+    </div>
+    <div class="texto-vintage">
+      <div class="alert alert-success" role="alert" style=" font-size: larger;justify-content: center; ;text-align: center; font-family:'Lucida Sans Regular';">
+        <marquee>  Categorías </marquee> 
+        
+      </div>
+      <div class="contenedor-productos">
+
+        <!-- productos-->  
+        <div class="col-md-3">
+          <div class="card h-50px card-productos">
+              <img class="card-img-top" src="{% static 'img/farmacia2.png' %}" alt="Card image" style="margin-top:50px;">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-text">Farmacia Mascotiendita</h5>
+                <a href="{% url 'farmacia' %}" class="btn btn-primary"><i class="fa-solid fa-bag-shopping"></i> Farmacia</a>
+              </div>
+          </div>
+        </div>
+      <div class="col-md-3" >
+        <div class="card h-50px card-productos" >
+            <img class="card-img-top" src="{% static 'img/perros2.png' %}" alt="Card image "style="margin-top:50px;">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-text">Artículos para Perros</h5>
+              <a href="{% url 'perros' %}" class="btn btn-primary"><i class="fa-solid fa-bag-shopping"></i> Perros</a>
+            </div>
+        </div>
+      </div>
+  
+      <div class="col-md-3">
+        <div class="card h-50px card-productos">
+            <img class="card-img-top" src="{% static 'img/gatos4.png' %}" alt="Card image"style="margin-top:50px">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-text">Artículos para Gatos</h5>
+              <a href="{% url 'gatos' %}" class="btn btn-primary"><i class="fa-solid fa-bag-shopping"></i> Gatos</a>
+            </div>
+        </div>
+      </div> 
+  
+      <div class="col-md-3">
+        <div class="card h-50px card-productos" >
+            <img class="card-img-top" src="{% static 'img/hamster.png' %}" alt="Card image"style="margin-top:50px">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-text">Animales Exóticos</h5>
+              <a href="{% url 'exoticos' %}" class="btn btn-primary"><i class="fa-solid fa-bag-shoppingbag-shopping"></i>Exóticos</a>
+            </div>
+        </div>
+      </div> 
+  
+      </div>
+  
+    </div>
+    </div>
+         
+    </div>
+    <div>
+{% endblock contenido %}

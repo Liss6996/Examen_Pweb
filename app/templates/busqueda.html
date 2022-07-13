@@ -1,0 +1,19 @@
+<!--Heredamos de la platilla el header y el footer -->
+{% extends 'productos.html' %}
+{% load static %}
+
+{% block producto %}
+<div class="row pt-4">
+  <div class="col-12 d-flex justify-content-center bg-success py-3 align-items-center">
+    <marquee>  Articulos Encontrados </marquee> 
+    
+    </div>
+
+</div>
+{% if cantidad == 1 %}
+    <h2 style="text-align:center;">Existe 1 coincidencia con <span style = "color: red">"{{ texto }}"</span></h2>
+{% else %}
+    <h2 style="text-align:center;">Existen {{ cantidad }} coincidencias con <span style = "color: red">"{{ texto }}"</span></h2>
+{% endif %}
+
+{% endblock producto %}

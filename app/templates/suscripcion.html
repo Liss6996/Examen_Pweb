@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+
+<div class="contenedor-tabla">
+    {% if cliente.estado_sub %}
+    <table class="table">
+        <thead>
+            <tr>
+               <th>Mensaje</th>
+               <th>Estado Suscripción</th>
+            </tr>
+        </thead>
+        <tbody>
+              <tr>
+               <td data-label="mensaje">¡ {{ cliente.usuario.first_name }} por estar suscrito/a tienes un descuento de 5% en tus siguientes compras!</td>
+               <td data-label="Estado Suscripción">
+               <form action="" method="POST"> 
+                {% csrf_token %}
+                    <input type="hidden" value="{{ cliente.id }}" name="txtCliente">  
+                    <select class="col-100" style="width: 100%;" name = "cboSuscripcion" id="cboSuscripcion">
+                            {% if cliente.estado_sub == True %}
+                                <option value="{{ True }}" selected >Suscrito</option>
+                                <option value = "{{ False }}" >No Suscrito</option>
+                            {% elif cliente.estado_sub == False %}
+                                <option value="{{ False }}" selected >No Suscrito</option>
+                                <option value = "{{ True }}" >Suscrito</option>
+                            {% endif %}      
+                    </select>
+                    
+                    <input type="submit" value="Actualizar" class="btn btn-primary">
+                </form>
+                </td>
+             </tr>
+        </tbody>
+      </table>
+    {% else %}
+      <h2>No hay suscripción activa.</h2>
+    {% endif %}
+
+</div>
+{% endblock contenido %}
+

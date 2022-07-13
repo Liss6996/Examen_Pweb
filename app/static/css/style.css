@@ -1,0 +1,188 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;  
+}
+
+header {
+    position: static;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 4px 6px 0 rgba(41, 61, 50, 0.18);
+
+    /* FLEX */
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+    color: white;
+}
+
+.image {
+    margin-top: 56px;
+}
+
+body {
+    display : block;
+    position: relative;
+}
+
+body::after{
+    content : "";
+    background-attachment: fixed;
+    background-image:url("../img/fondo2332.jpg");
+    background-size: cover;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.footer {
+    color: #000;
+    margin-top: 30px;
+    margin-bottom:0;
+    background-color: mistyrose;
+}
+
+.col-sm {
+    justify-content:center;
+}
+
+h4 {
+    font-family:'Lucida Sans';
+    text-shadow: 1px 1px 1px rgba(22, 22, 26, 0.18);
+
+    
+}
+h2 {
+    color: black;
+}
+h3 {
+    font-family:'Arial', Helvetica, sans-serif;
+}
+
+
+.texto-banner {
+    font-family:'Lucida Sans';
+    font-size: medium;
+    font-style: italic;
+    text-align: center;
+    padding: 2%;
+    color: black;
+    text-shadow: 1px 1px 1px #13193e;
+}
+
+#demo {
+    background: rgba(255, 228, 225, 0.6);
+}
+
+
+.servicios {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: medium;
+}
+
+.card {
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+    border-radius: 0;
+    border: 0;
+    margin-bottom: 1.5em;
+    text-align: center;
+
+  }
+  .card:hover {
+    transform: scale(1.1);
+  }
+
+.card-img-top {
+    width: 100%;
+    height: 150px;
+    
+}
+  .contenedor-productos {
+    margin-top: 9%;
+    width: 100%; 
+    height: 70%;
+    display: flex;
+    justify-content: center;
+
+}
+
+  .banner-ayuda {
+    box-shadow: 0 0px,2px 0 hsla(315, 7%, 45%, 0.1);
+    margin: auto;
+    margin-top:50px;
+    background-color: mistyrose;
+    width: 80%;
+  }
+
+  .contenedor-banner-ayuda {
+    width: 30%;
+  }
+
+  .texto-vintage {
+    
+    margin-top: 5%;
+    width: 75%;
+    padding-right: 0.5%;
+}
+
+.formulario {
+    width: 70%;
+    margin-top: 50px; 
+    margin-left: 50px;
+}
+
+.contenedor-formulario {
+    text-align:center;
+    text-shadow: 1px 1px 1px rgba(22, 22, 26, 0.18) ;
+    width: 60%;
+    background-color: rgba(175, 255, 195, 0.363);
+    padding-bottom: 15px;
+}
+
+.texto-a {
+    padding: 7px;   
+}
+
+.card-productos {
+    height: 400px;
+}
+
+.texto-logo{
+    font-family:'Lucida Sans';
+    font-size: medium;
+    font-style: italic;
+    text-align: center;
+    color: black;
+    text-shadow: 1px 1px 1px #13193e;
+}
+
+.redes-sociales {
+    color: #000;
+}
+
+.redes-sociales:hover {
+    color: red;
+    transition: all 0.3s;
+    transform: scale(150%);
+}
+
+.links-page {
+    color : #fff;
+}
+
+.links-page:hover {
+    color : #000;
+    transition: all 0.3s;
+    transform: scale(110%); 
+}

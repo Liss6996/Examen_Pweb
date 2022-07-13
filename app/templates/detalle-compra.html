@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+
+<div class="contenedor-tabla">
+   <table class="table">
+     <thead>
+     	<tr>
+     	  <th>Código</th>
+     	  <th>Nombre</th>
+     	  <th>Marca</th>
+     	  <th>Precio</th>
+     	  <th>Descripcion</th>
+        <th>Tipo</th>
+        <th>Imagen</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+     	</tr>
+     </thead>
+     <tbody>
+        {% for x in listaProductos %}
+     	  <tr>
+     	  	  <td data-label="Código">{{ x.id_producto.codigo }}</td>
+     	  	  <td data-label="Nombre">{{ x.id_producto.nombre }}</td>
+     	  	  <td data-label="Marca">{{ x.id_producto.marca }}</td>
+     	  	  <td data-label="Precio">${{ x.id_producto.precio }}</td>
+        
+     	  	  <td data-label="Descripcion">{{ x.id_producto.descripcion }}</td>
+            <td data-label="Tipo">{{ x.id_producto.id_tipo.tipo }}</td>
+            {% if x.id_producto.imagen %}
+              <td data-label="Imagen"><img style="width: 50px; height: 50px;" src="{{ x.id_producto.imagen.url }}" alt=""></td>
+            {% else %}
+              <td data-label="Imagen"><img style="width: 50px; height: 50px;" src="{% static 'img/img-default.jpg' %}" alt=""></td>            
+            {% endif %}
+            <td data-label="Cantidad">
+
+
+              <span style="font-size:20px">{{ x.cantidad }}</span>
+
+
+            </td> 
+            <td data-label="Subtotal">${{ x.subtotal }}</td>
+
+     	  
+          </tr>
+        {% endfor %}
+     </tbody>
+   </table>
+</div>
+{% endblock contenido %}
+
+{% block js %}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src={% static "js/carrito.js" %}></script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+
+<div class="contenedor-tabla">
+    {% if listaSeguimiento %}
+    <table class="table">
+        <thead>
+            <tr>
+               <th>Cliente</th>
+               <th> - </th>
+               <th>Fecha de compra</th>
+               <th>Cantidad de productos</th>
+               <th>Monto Pagado</th>
+               <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for x in listaSeguimiento %}
+              <tr>
+                <td>{{ x.id_pedido.id_cliente.usuario.first_name }}</td>
+               {% if x.id_estado.id == 1 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/validacion.png' %}" alt=""></td>
+               {% elif x.id_estado.id == 2 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/preparacion.png' %}" alt=""></td>
+               {% elif x.id_estado.id == 3 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/reparto.png' %}" alt=""></td>
+               {% elif x.id_estado.id == 4 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/entrega.png' %}" alt=""></td>
+               {% endif %}
+               <td data-label="Fecha de compra">{{ x.fecha_proceso }}</td>
+               <td data-label="Cantidad de productos">{{ x.id_pedido.cantidad }}</td>
+               <td data-label="Monto Pagado">${{ x.id_pedido.total }}</td>
+               <td data-label="Estado">  
+                <form action="" method="POST"> 
+                {% csrf_token %}
+                    <input type="hidden" value="{{ x.id }}" name="txtDetalle">  
+                    <select class="col-100" style="width: 100%;" name = "cboEstado" id="cboEstado">
+                        {% for i in estados %}
+                            {% if i.id == x.id_estado.id %}
+                                <option value="{{ i.id }}" selected >{{ i.descripcion }}</option>
+                            {% else %}
+                                <option value = "{{ i.id }}" >{{ i.descripcion }}</option>
+                            {% endif %}
+                        
+                        {% endfor %}        
+                    </select>
+                    
+                    <input type="submit" value="Actualizar" class="btn btn-primary">
+                </form>
+                </td>
+             </tr>
+           {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <h2>No hay seguimientos</h2>
+    {% endif %}
+
+</div>
+{% endblock contenido %}

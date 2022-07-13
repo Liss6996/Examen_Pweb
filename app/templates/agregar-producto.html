@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+
+<!--Formulario-->
+<div class="formulario" style="display: flex; justify-content: center; width: 100%;">      
+    <div class="contenedor-formulario" >
+      
+      <div class="texto-a">
+        <h2>Agregar Producto:</h2>
+        
+      </div>
+
+      <!-- productos-->
+      <!--
+        Código	Nombre	Marca	Precio	Descripcion	Tipo	Imagen	Creación	Actualizacion	Operaciones
+      -->
+      <form id="productoForm" style="width: 60%; margin: auto;"  method="POST" action="{% url 'agregar-producto' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+          <div class="form-group">
+            <label for="nom">Nombre:</label>
+            <input type="text" class="form-control" id="txtNombre" name="txtNombre">
+          </div>
+
+          <div id="contenedor-error-nombre"></div>
+
+          <div class="form-group">
+            <label for="usr">Marca:</label>
+            <input type="text" class="form-control" id="txtMarca" name="txtMarca" >
+          </div>
+        
+          <div id="contenedor-error-marca"></div>
+
+          <div class="form-group">
+            <label for="eml">Precio:</label>
+            <input type="text" class="form-control" id="txtPrecio" name="txtPrecio">
+          </div>
+
+          <div id="contenedor-error-precio"></div>
+
+          <div class="form-group">
+            <label for="eml">Stock:</label>
+            <input type="text" class="form-control" id="txtStock" name="txtStock">
+          </div>
+          
+          <div id="contenedor-error-stock"></div>
+
+          <div class="form-group">
+            <label for="eml">Descripción:</label>
+            <input type="text" class="form-control" id="txtDescripcion" name="txtDescripcion">
+          </div>
+  
+          <div id="contenedor-error-descripcion"></div>
+
+          <select class="col-100" style="width: 100%;" name = "cboTipo" id="cboTipo">
+            <option value="" selected disabled hidden>Seleccione una opción</option>
+            {% for x in listaTipos %}      
+              <option value = "{{x.id_tipo}}" >{{x.tipo}}</option>
+            {% endfor %}     
+          </select>
+
+          <div id="contenedor-error-cbo"></div>
+          
+          <div class="form-group">
+            <input id="txtImagen" name="txtImagen" class="col-100" type="file">
+          </div>
+          
+          <p style="color: red; font-size: 30px;">{{ mensaje }}</p>
+
+          <button type="submit" class="btn btn-success">Confirmar</button>
+
+      </form>
+
+    </div>  
+  </div>
+  
+{% endblock %}
+
+
+{% block js %}
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+
+      function mensaje(p_icon, p_title,p_message){
+        Swal.fire({
+          icon: p_icon, // error
+          title: p_title, 
+          text: p_message
+        })
+      }
+
+      function sleep(milliseconds) {
+        var start = new Date().getTime();
+          for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds) {
+              break;
+          }
+        }
+      }
+
+      // Obtenemos la referencia
+      const $formulario = document.querySelector('#productoForm'),
+      $nombre = document.querySelector('#txtNombre'),
+      $marca = document.querySelector('#txtMarca'),
+      $precio = document.querySelector('#txtPrecio'),
+      $stock = document.querySelector('#txtStock'),
+      $descripcion = document.querySelector('#txtDescripcion')
+      $cboTipo = document.querySelector('#cboTipo');
+
+      $formulario.onsubmit = evento => {
+        // Se previene el envio del formulario
+        evento.preventDefault();
+
+        const contenedorNombre = document.getElementById('contenedor-error-nombre'),
+        contenedorMarca = document.getElementById('contenedor-error-marca'),
+        contenedorPrecio = document.getElementById('contenedor-error-precio'),
+        contenedorStock = document.getElementById('contenedor-error-stock'),
+        contenedorDescripcion = document.getElementById('contenedor-error-descripcion'),
+        contenedorCbo = document.getElementById('contenedor-error-cbo');
+        
+        contenedorNombre.innerHTML = '';
+        contenedorMarca.innerHTML = '';
+        contenedorPrecio.innerHTML = '';
+        contenedorStock.innerHTML = '';
+        contenedorDescripcion.innerHTML = '';
+        contenedorCbo.innerHTML = '';
+        
+
+        const nombre = $nombre.value,
+        marca = $marca.value,
+        descripcion = $descripcion.value,
+        cboTipo = $cboTipo.value;
+
+        let precio = $precio.value,
+        stock = $stock.value;
+
+        // Validación
+        let v_valida = 0;
+        
+        if(nombre.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El nombre no debe estar vacío!
+                            </div>`;
+          contenedorNombre.innerHTML = v_errorMessage;
+        }else if(nombre.trim().length < 3){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El nombre debe tener al menos 3 carácteres!
+                            </div>`;
+          contenedorNombre.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        if(marca.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La marca no puede estar vacía!
+                            </div>`;
+          contenedorMarca.innerHTML = v_errorMessage;
+        }else if(marca.trim().length < 3){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La marca debe tener al menos 3 carácteres!
+                            </div>`;
+          contenedorMarca.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        if(descripcion.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La descripción no puede estar vacía!
+                            </div>`;
+          contenedorDescripcion.innerHTML = v_errorMessage;
+        }else if(descripcion.trim().length < 6){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡La descripción debe tener al menos 6 carácteres!
+                            </div>`;
+          contenedorDescripcion.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+
+        if(precio.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El precio no puede estar vacío!
+                            </div>`;
+          contenedorPrecio.innerHTML = v_errorMessage;
+        }
+
+        try {
+          // Conventimos a número
+          precio = parseInt(precio);
+
+          if(precio < 0){
+            v_errorMessage = `<div class="alert alert-danger" role="alert">
+                                ¡El precio debe ser mayor a 0!
+                              </div>`;
+            contenedorPrecio.innerHTML = v_errorMessage;
+          }else{
+            v_valida += 1
+          }
+
+        } catch (error) {
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El precio debe ser un valor númerico!!
+                            </div>`;
+          contenedorPrecio.innerHTML = v_errorMessage;
+        }
+
+
+        
+        if(stock.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El stock no puede estar vacío!
+                            </div>`;
+          contenedorStock.innerHTML = v_errorMessage;
+        }
+
+        try {
+          // Conventimos a número
+          stock = parseInt(stock);
+
+          if(stock < 0){
+            v_errorMessage = `<div class="alert alert-danger" role="alert">
+                                ¡El stock debe ser mayor a 0!
+                              </div>`;
+            contenedorStock.innerHTML = v_errorMessage;
+          }else{
+            v_valida += 1
+          }
+
+        } catch (error) {
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡El stock debe ser un valor númerico!
+                            </div>`;
+          contenedorStock.innerHTML = v_errorMessage;
+        }
+
+        if(cboTipo.trim() === ''){
+          v_errorMessage = `<div class="alert alert-danger" role="alert">
+                              ¡Seleccione un tipo!
+                            </div>`;
+          contenedorCbo.innerHTML = v_errorMessage;
+        }else{
+          v_valida += 1
+        }
+
+        if(v_valida === 6){ 
+          // Se envia el formulario
+          $formulario.submit();
+        }else{
+          mensaje('error','Oops! ...','¡Porfavor, revise los datos ingresados! =(')
+        }
+
+
+
+      };
+    </script>
+
+{% endblock js %}

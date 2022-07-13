@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+
+<div class="contenedor-tabla">
+    {% if listaCompras %}
+    <table class="table">
+        <thead>
+            <tr>
+               <th>Fecha de compra</th>
+               <th>Cantidad de productos</th>
+               <th>Monto Pagado</th>
+               <th>Operación</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for x in listaCompras %}
+            <tr>
+                <td data-label="Fecha de compra">{{ x.id_pedido.fecha }}</td>
+                <td data-label="Cantidad de productos">{{ x.id_pedido.cantidad }}</td>
+                <td data-label="Monto Pagado">${{ x.id_pedido.total }}</td>
+                <td data-label="Operacion">   
+                    <input class="btn btn-warning" style="width: 100px;" type="submit" value="Ver Detalle" onclick="verCompra({{x.id_pedido.id}})"> 
+                </td>
+            </tr>
+           {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <h2>No has realizado ninguna compra</h2>
+    {% endif %}
+
+</div>
+{% endblock contenido %}
+
+{% block js %}
+    <script src={% static "js/compras.js" %}></script>
+{% endblock %}

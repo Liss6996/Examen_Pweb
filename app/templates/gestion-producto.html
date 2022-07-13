@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+{% endblock css %}
+
+{% block contenido %}
+<div style="padding-left: 20px; padding-top: 20px;">
+    <a class="btn btn-success" href="{% url 'agregar-producto' %}" style="width: 100px;">Agregar</a>
+</div>
+
+{% if listaProductos %}
+<div class="contenedor-tabla">
+   <table class="table">
+     <thead>
+     	<tr>
+     	  <th>Código</th>
+     	  <th>Nombre</th>
+     	  <th>Marca</th>
+     	  <th>Precio</th>
+        <th>Stock</th>
+     	  <th>Descripcion</th>
+        <th>Tipo</th>
+        <th>Imagen</th>
+        <th>Creación</th>
+        <th>Actualización</th>
+        <th>Operaciones</th>
+     	</tr>
+     </thead>
+     <tbody>
+        {% for x in listaProductos %}
+     	  <tr>
+     	  	  <td data-label="Código">{{ x.codigo }}</td>
+     	  	  <td data-label="Nombre">{{ x.nombre }}</td>
+     	  	  <td data-label="Marca">{{ x.marca }}</td>
+     	  	  <td data-label="Precio">${{ x.precio }}</td>
+            <td data-label="Stock">{{ x.stock }}</td>
+     	  	  <td data-label="Descripcion">{{ x.descripcion }}</td>
+            {% if x.id_tipo == 1 %}
+              <td data-label="Tipo">perros</td>
+            {% endif %}
+            {% if x.id_tipo == 2 %}
+              <td data-label="Tipo">gatos</td>
+            {% endif %}
+            {% if x.id_tipo == 3 %}
+              <td data-label="Tipo">exoticos</td>
+            {% endif %}
+            {% if x.id_tipo == 4 %}
+              <td data-label="Tipo">farmacia</td>
+            {% endif %}
+              {% if x.imagen %}
+                <td data-label="Imagen"><img style="width: 50px; height: 50px;" src="{{ x.imagen }}" alt=""></td>
+              {% else %}
+                <td data-label="Imagen"><img style="width: 50px; height: 50px;" src="{% static 'img/img-proc-default.jpg' %}" alt=""></td>
+              {% endif %}
+              
+              <td data-label="Creación">{{ x.fecha_creacion }}</td> 
+              <td data-label="Actualización">{{ x.fecha_actualizacion }}</td>
+              <td data-label="Operaciones">   
+                <a class="btn btn-primary" style="width: 100px;" href="{% url 'cargar-producto' x.codigo %}">Modificar</a>
+                <input class="btn btn-danger" style="width: 100px;" type="submit" value="Eliminar" onclick="confirmDelete({{x.codigo}})"> 
+              </td>
+     	  </tr>
+        {% endfor %}
+     </tbody>
+   </table>
+</div>
+
+{% else %}
+  <h2>No hay productos.</h2>
+{% endif %}
+
+{% endblock contenido %}
+
+{% block js %}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src={% static "js/productos.js" %}></script>
+{% endblock %}

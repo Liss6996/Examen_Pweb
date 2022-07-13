@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+
+<div style="padding-left: 20px; padding-top: 20px;">
+    <a class="btn btn-primary" href="{% url 'index' %}" style="width: 200px;">Agregar Productos</a>
+</div>
+
+
+<div class="contenedor-tabla">
+   <table class="table">
+     <thead>
+     	<tr>
+     	  <th>Código</th>
+     	  <th>Nombre</th>
+     	  <th>Marca</th>
+     	  <th>Precio</th>
+        <th>Stock</th>
+     	  <th>Descripcion</th>
+        <th>Tipo</th>
+        <th>Imagen</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+        <th>Operaciones</th>
+     	</tr>
+     </thead>
+     <tbody>
+        {% for x in listaCarrito %}
+     	  <tr>
+     	  	  <td data-label="Código">{{ x.id_producto.codigo }}</td>
+     	  	  <td data-label="Nombre">{{ x.id_producto.nombre }}</td>
+     	  	  <td data-label="Marca">{{ x.id_producto.marca }}</td>
+     	  	  <td data-label="Precio">${{ x.id_producto.precio }}</td>
+            <td data-label="Stock">{{ x.id_producto.stock }}</td>
+     	  	  <td data-label="Descripcion">{{ x.id_producto.descripcion }}</td>
+            <td data-label="Tipo">{{ x.id_producto.id_tipo.tipo }}</td>
+            {% if x.id_producto.imagen %}
+              <td data-label="Imagen"><img style="width: 50px; height: 50px;" src="{{ x.id_producto.imagen.url }}" alt=""></td>
+            {% else %}
+              <td data-label="Imagen"><img style="width: 50px; height: 50px;" src="{% static 'img/img-default.jpg' %}" alt=""></td>            
+            {% endif %}
+            <td data-label="Cantidad">
+
+              <form action="{% url 'sumar-carrito' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="txtSuma" value="{{ x.id }}">
+                <input value="+" style="width:30px; height:30px; background: #000; color: #fff; border-radius:50%; text-align:center; font-size:15px; font-weight:500"  type="submit">
+              </form>
+
+              <span style="font-size:20px">{{ x.cantidad }}</span>
+
+              <form action="{% url 'restar-carrito' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="txtResta" value="{{ x.id }}">
+                <input value="-" style="width:30px; height:30px; background: #000; color: #fff; border-radius:50%; text-align:center; font-size:15px; font-weight:500"   type="submit">
+              </form>
+
+            </td> 
+            <td data-label="Subtotal">{{ x.subtotal }}</td>
+
+            <td data-label="Operaciones">   
+              <input class="btn btn-danger" style="width: 100px;" type="submit" value="Eliminar" onclick="confirmDeleteCarrito({{x.id}},{{x.id_producto.codigo}})"> 
+            </td>
+     	  
+          </tr>
+        {% endfor %}
+     </tbody>
+   </table>
+   {% if total != 0 %}
+    <h2>TOTAL A PAGAR 
+      {% if descuento %}
+        <span class="descuento">${{ total }}</span> 
+        <span>${{ descuento }}</span>
+      {% else %}
+        <span>${{ total }}</span>
+      {% endif %}
+    </h2>
+    <div style="display: flex; justify-content: right;">
+      <a class="btn btn-success" href="{% url 'pago-compra' %}" style="width: 200px;">Aceptar</a>
+    </div>
+   {% endif %}
+</div>
+{% endblock contenido %}
+
+{% block js %}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src={% static "js/carrito.js" %}></script>
+{% endblock %}

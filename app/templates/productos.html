@@ -1,0 +1,50 @@
+<!--Heredamos de la platilla el header y el footer -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+  <link rel="stylesheet" href="{% static 'css/productos.css' %}">
+{% block contenido %}
+    {% block producto %}
+
+    {% endblock producto %}
+    {% if listaProductos %}
+    <div class="card-container" style="display: flex; flex-wrap: wrap; justify-content: center;">
+    {% for x in listaProductos %}
+      <div class="product-card" style="text-align: center !important;width: 20% !important;height:400px !important; margin: 30px !important;cursor: pointer !important;padding: 10px !important; background: #00000090; border-radius: 10px;">
+        {% if x.imagen %}
+            <img width="115px" height="125px" style="border-top-left-radius: 10px; border-bottom-right-radius: 10px" src="{{ x.imagen.url }}" alt="Retro Pile Fleece Pullover" />
+        {% else %}
+            <img width="115px" height="125px" style="border-top-left-radius: 10px; border-bottom-right-radius: 10px" src="{% static 'img/img-default.jpg' %}" alt="Retro Pile Fleece Pullover" />
+        {% endif %}
+        <h2 style="color: #000">{{ x.nombre }}</h2>
+        <p>{{ x.descripcion }}</p>
+        <h4 style="color: #fff;">Categoría : {{ x.id_tipo.tipo }}</h4>
+        <h4 style="color:#0EE10E">${{ x.precio }}</h4>
+        {% if x.stock == 1 %}
+          <p style="color: #fff; text-shadow: 2px 2px 2px #000">¡Queda sólo <span style="color: red; font-size: 20px; font-weight: bold">{{ x.stock }}</span> producto en tienda!</p>
+        {% elif x.stock > 1 %}
+          <p style="color: #fff; text-shadow: 2px 2px 2px #000">¡Quedan sólo <span style="color: red; font-size: 20px; font-weight: bold">{{ x.stock }}</span> productos en tienda!</p>
+        {% else %}
+          <p style="color: #fff; text-shadow: 2px 2px 2px #000">Producto <span style="color: red; font-size: 20px; font-weight: bold"> <br> Sin stock =(</span> <br> ¡vuelva pronto!</p>
+        {% endif %}
+
+        {% if x.stock > 0 %}
+          <form action="{% url 'carrito-compra' %}" method="post">
+          {% csrf_token %}
+              <input type="hidden" id="txtCodigo" name="txtCodigo" value="{{ x.codigo }}">
+              <input class="btn btn-success" type="submit" value="Agregar al Carrito">
+          </form>
+        {% endif %}
+        
+      </div>
+    {% endfor %}
+    </div>
+
+    {% else %}
+    <h2>No hay productos.</h2>
+    {% endif %}
+    
+{% endblock %}

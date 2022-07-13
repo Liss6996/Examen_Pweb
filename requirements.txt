@@ -1,0 +1,14 @@
+# Dependencias
+#pip freeze # Para ver que dependencias tenemos instaladas
+#pip --upgrade 
+django
+django-admin-interface
+pillow
+djangorestframework
+requests
+django-cors-headers
+django-crispy-forms
+mysqlclient
+
+
+

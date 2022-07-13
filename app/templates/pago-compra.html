@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+ 
+{% block contenido %}
+ 
+    <div class="card-container" style="display: flex; flex-wrap: wrap; justify-content: center;">
+      <div class="product-card" style="text-align: center !important;width: 50% !important;height:350px !important; margin: 30px !important;cursor: pointer !important;padding: 10px !important; background: #00000090; border-radius: 10px;">
+        <h2 style="color: #fff">Confirmar Pago</h2>
+        <p style="color: #fff">{{ cantidad }} Productos </p>
+        {% if descuento %}
+        <p style="color: #fff; font-size:30px" class="descuento" >${{ totalPago }}</p>
+        <p style="color: #fff; text-shadow: 2px 2px 2px #000">¡Tienes un descuento del 5% por suscribirte!</p>
+        {% endif %}
+        <p style="color: #fff">TOTAL A PAGAR </p>
+        
+ 
+        {% if descuento %}
+        <p style="color:#0EE10E; font-size:30px">${{ descuento }}</p>
+        <input class="btn btn-success" type="submit" value="Pagar" onclick="pagar({{ saldo }},{{ descuento }},'{{ user.first_name }}')">          
+        {% else %}
+        <p style="color: #fff; font-size:30px">${{ totalPago }}</p>
+        <input class="btn btn-success" type="submit" value="Pagar" onclick="pagar({{ saldo }},{{ totalPago }},'{{ user.first_name }}')">
+        
+        {% endif %}
+                 
+    </div>
+    </div>
+    
+{% endblock contenido %}
+
+{% block js %}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src={% static "js/pago.js" %}></script>
+{% endblock js %}

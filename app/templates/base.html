@@ -1,0 +1,296 @@
+<!-- Cargamos los archivos estáticos -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascotiendita</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="shortcut icon" href="{% static 'img/icon4.png' %}" type="image/x-icon">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    
+    {% block css %}
+
+    {% endblock css %}
+
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>  
+  <header>
+  <nav class="navbar fixed-top navbar-expand-lg bg-success">
+      <a class="navbar-brand" style="color: #fff;">Mascotiendita</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="width: 100%; display: flex; justify-content: space-between; padding: 0 20px">
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" style="color: #000;"><i class="fa-solid fa-user"></i>Bienvenido/a {{ user.first_name }} {{ user.last_name}}</a>
+          </li>    
+        {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link links-page" href="{% url 'index' %}"><i class="fa-solid fa-house"></i>Inicio</a>
+          </li>
+        
+        <!--Le asignamos los permisos -->
+        
+        {% if perms.app.add_producto and perms.app.change_producto and perms.app.view_producto and perms.app.delete_producto %}
+          <li class="nav-item">
+            <a class="nav-link links-page" href="{% url 'productos' %}" ><i class="fa-solid fa-store"></i>Productos</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link links-page" href="{% url 'admin-seguimiento' %}" ><i class="fa-solid fa-truck-fast"></i>Seguimientos</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link links-page" href="{% url 'admin-clientes' %}" ><i class="fa-solid fa-users"></i>Clientes</a>
+          </li>
+
+          
+        {% endif %}
+
+        {% if not user.is_authenticated %}
+        <li class="nav-item" data-toggle="modal" data-target="#login" style="cursor: pointer;">
+          <a class="nav-link links-page" ><i class="fa-solid fa-arrow-right-to-bracket"></i>Iniciar Sesión</a>
+        </li>
+        {% else %}
+        
+        {% if not user.is_staff %}
+        <li class="nav-item" style="cursor: pointer;">
+          <a  href="{% url 'seguimiento' %}"class="nav-link links-page" ><i class="fa-solid fa-truck-fast"></i>Seguimiento</a>
+        </li>
+
+        <li class="nav-item" style="cursor: pointer;">
+          <a  href="{% url 'historial-compra' %}"class="nav-link links-page" ><i class="fa-solid fa-box"></i>Historial</a>
+        </li>
+
+        <li class="nav-item" style="cursor: pointer;">
+          <a  href="{% url 'desactivar-suscripcion' %}"class="nav-link links-page" ><i class="fa-solid fa-star"></i>Suscripción</a>
+        </li>
+
+
+        <li class="nav-item" style="cursor: pointer;">
+          <a class="nav-link links-page" href="{% url 'carrito-compra' %}" style="display: flex; justify-content: center; align-items: center;" ><i class="fa-solid fa-cart-shopping"></i>
+            <div style="text-align: center; display: flex; justify-content: center; align-items: center; background-color: red; width:20px; height:20px; border-radius: 50%;">
+                <span style="font-size:10px;">{{ request.session.cantidad_carrito }}</span>
+            </div></a>
+        </li>
+
+        {% endif %}
+        <li class="nav-item" style="cursor: pointer;">
+          <a class="nav-link links-page" href="{% url 'logout' %}" ><i class="fa-solid fa-arrow-right-to-bracket"></i>Cerrar Sesión</a>
+        </li>
+
+        {% if not user.is_staff %}
+          Cuenta ${{ request.session.saldo_cliente }}
+          <span id="txtDolar"></span>
+        {% endif %}
+          
+        {% endif %}
+
+      </div>
+      
+       <div class="nav-item ml-auto">
+        </ul>
+        <!--{ if user.is_authenticated } -->
+        <form class="d-flex" role="search" method="POST" action="{% url 'filtro' %}">
+          {% csrf_token %}
+          <input class="form-control me-2" type="search" placeholder="¿Qué estas buscando?" aria-label="Search" name="filtro-busqueda">
+          <button class="btn btn-primary" type="submit">Buscar</button>
+        </form>
+       
+      </div>
+  </nav>
+<div class="image"><img src="{% static 'img/banner.jpg' %}" width="100%" height="100%" alt="100px">
+
+</div>
+  
+</header>
+
+
+{% block contenido %}
+
+{% endblock contenido %}
+
+   
+          <!--Carrusel-->
+          <div id="demo" class="carousel slide, text-center" data-ride="carousel" style ="margin-top: 50px;">
+      
+            <!-- The slideshow -->
+            <div class="carousel-inner">
+              <div class="carousel-item active" style="margin-top:20px;">
+                <img src="{% static 'img/Screenshot_1.png' %}" height="200px" width="600px">
+              </div>
+              <div class="carousel-item" style="margin-top:20px;">
+                <img src="{% static 'img/mascotas1.png' %}" height="200px" width="600px">
+              </div>
+              <div class="carousel-item" style="margin-top:20px;">
+                <img src="{% static 'img/mascotas3.png' %}"  height="200px" width="600px">
+    
+            </div>
+          
+            <!-- Left and right controls -->
+            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo" data-slide="next">
+              <span class="carousel-control-next-icon" ></span>
+            </a>
+          </div>   
+          
+        <!--footer-->
+      <div class="footer text-center" style="padding-top: 20px; padding-bottom: 10px;">
+          <p class="texto-logo">Mascotiendita <i class="fa-solid fa-registered"></i></p>
+          <p>Todos los Derechos Registrados</p>
+          <h6> Contáctanos</h6>
+          <a href="#"><i class="fa-brands fa-instagram redes-sociales"></i></a>
+          &nbsp;
+          <a href="#"><i class="fa-brands fa-facebook-f redes-sociales"></i></a>
+          &nbsp;
+          <a href="#"><i class="fa-solid fa-phone redes-sociales"></i></a>        
+      </div>
+          </div>
+    </div>
+
+
+           <!-- Modal Iniciar sesión -->
+           <div class="modal" id="login">
+            <div class="modal-dialog">
+            <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Iniciar sesión:</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" style="background-image: url(../static/img/bg1.png); background-size: cover;">
+                <div style="text-align: center;">
+                    <img src="{% static 'img/rabbit-hello.gif' %}" alt="" width="100px" height="100px">
+                    <!--<img src="https://d.wattpad.com/story_parts/720527983/images/159622820572f91172288086961.gif" alt="" width="100px" height="100px">-->
+                    <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="txtUser">Usuario:</label>
+                            <input type="text" placeholder="Ingrese su usuario" class="form-control" id="txtUser" name="txtUser">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtPass">Contraseña:</label>
+                            <input type="password" placeholder="Ingrese su Contraseña" class="form-control" id="txtPass" name="txtPass">
+                        </div>
+
+                        <input value="Iniciar sesión" type="submit" id="btnEnviar" name="btnEnviar" class="btn btn-info">
+                        <!--<input value="Limpiar" type="submit" id="btnLimpiar" name="btnLimpiar" class="btn btn-danger">-->
+                    </form>
+                </div>
+            </div>
+
+             <!-- Modal footer -->
+          
+            <div class="modal-footer">
+              <a href="#">¿Has olvidado tu contraseña?</a>
+              <p style="color: red;">{{ mensaje }}</p>
+            </div>  
+    
+        </div>
+            </div>
+            </div>
+            
+                <!-- Modal Donar-->
+                <div class="modal fade" id="DONA" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+    
+                    <!--Modal Header-->
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Tu porte ayuda a Fundación Patitas</h5>
+                          </div>
+                    <!--Modal Body-->
+                    <div class="modal-body">
+                      <div style="text-align: center; ">
+                        <img src="{% static 'img/coneno2.gif' %}" alt="" width="100px" height="100px">
+                        
+                        
+                      <form action="{% url 'donacion' %}" method="POST">
+                      {% csrf_token %}
+                      </div>
+
+                      {% if not user.is_authenticated %}
+
+                      <div class="form-group" style="margin-top: 10px;">
+                      <label for="txtNombre">Nombre Completo: </label>
+                      <input type="text" placeholder="" class="form-control" id="txtNombre" name="txtNombre">
+                    </div>
+  
+                    <div class="form-group" style="margin-top: 10px;">
+                      <label for="txtEmail">Correo Electronico: </label>
+                      <input type="text" placeholder="" class="form-control" id="txtEmail" name="txtEmail">
+                    </div>
+                    
+                    {% endif %}
+                      
+                    <div class="form-group" style="margin-top: 40px;">
+                      <label for="txtMonto">Monto: </label>
+                      <input type="text" placeholder="$" class="form-control" id="txtMonto" name="txtMonto">
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+
+                 
+                  </div>
+                </div>                   
+                    
+                    <!--modal footer-->
+                    <div class="modal-footer">
+              
+                    </form> 
+                    </div>
+                  </div>
+                </div>
+  
+    {% block js %}
+              {% if user.is_authenticated and not perms.app.add_producto%}
+                <script type="text/javascript">
+                  // Obtenemos el valor del dólar y hacemos la conversión
+                  window.onload = function convertidor(){
+                    fetch("https://mindicador.cl/api/dolar").then(
+                      function (response) {
+                        if(response.status!=200){
+                          alert("No se pudo conectar al servicio.");
+                          return;
+                        }
+                        // Recuperar datos de la respuesta
+                        response.json().then(function(data){
+                          var dolar = data.serie[0].valor;
+                          var etiqueta = document.getElementById("txtDolar").innerHTML = "USD $" + Math.round(({{ request.session.saldo_cliente }} / dolar)) ;
+                          })
+                      }
+                    )
+                  }
+                </script>
+              {% endif %}
+    {% endblock js %}
+    
+  </body>
+</html>
+
+

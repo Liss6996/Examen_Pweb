@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/tabla.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+
+<div class="contenedor-tabla">
+    {% if listaSeguimiento %}
+    <table class="table">
+        <thead>
+            <tr>
+               <th> - </th>
+               <th>Fecha de compra</th>
+               <th>Cantidad de productos</th>
+               <th>Monto Pagado</th>
+               <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for x in listaSeguimiento %}
+              <tr>
+               {% if x.id_estado.id == 1 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/validacion.png' %}" alt=""></td>
+               {% elif x.id_estado.id == 2 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/preparacion.png' %}" alt=""></td>
+               {% elif x.id_estado.id == 3 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/reparto.png' %}" alt=""></td>
+               {% elif x.id_estado.id == 4 %}
+                   <td data-label="Imagen"><img width="50px" height="50px" src="{% static 'img/entrega.png' %}" alt=""></td>
+               {% endif %}
+               <td data-label="Fecha de compra">{{ x.fecha_proceso }}</td>
+               <td data-label="Cantidad de productos">{{ x.id_pedido.cantidad }}</td>
+               <td data-label="Monto Pagado">${{ x.id_pedido.total }}</td>
+               <td data-label="Estado">{{ x.id_estado.descripcion }}</td>
+             </tr>
+           {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <h2>No hay seguimientos</h2>
+    {% endif %}
+
+</div>
+{% endblock contenido %}
